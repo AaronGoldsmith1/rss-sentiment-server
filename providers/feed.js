@@ -16,6 +16,13 @@ const parser = new Parser({ customFields: {
   }
 });
 
+const filters = {
+  0: (item) => item,
+  1: (item) => item.score >= -0.25 && item.score <= 1,
+  2: (item) => item.score >= 0 && item.score <= 1,
+  3: (item) => item.score >= 0.25 && item.score <= 1
+}
+
 const calculateChartData = (feed) => {
   let ratings = feed.reduce((acc, val) => {
     if (val.score >= -1 && val.score < -0.25) acc.veryNegative++
@@ -56,13 +63,20 @@ const parseRSS = async function (url) {
    } 
  })
 
- feed.chartData = calculateChartData(feed.items)
- feed.chartData.name = feed.title
  
+ feed.chartData = calculateChartData(feed.items)
+ feed.chartData.title = feed.title
+ feed.feedUrl = url
+ feed.imageUrl = feed.image && feed.image.url || '',
+ feed.description = feed.description
+ feed.filterStrength = 0
   // console.log(feed)
   return feed
 };
 
+
+
 module.exports = {
+  filters,
   parseRSS,
 }

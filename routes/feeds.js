@@ -4,7 +4,7 @@ const ctrl = require('../controllers');
 
 // routes
 // router.get('/', ctrl.feeds.index);
-// router.get('/:id', ctrl.feeds.show);
+router.get('/:id', ctrl.feeds.show);
 router.post('/', ctrl.feeds.create);
 // router.put('/:id', ctrl.feeds.update);
 // router.delete('/:id', ctrl.feeds.destroy);

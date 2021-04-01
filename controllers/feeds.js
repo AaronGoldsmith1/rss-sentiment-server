@@ -1,33 +1,48 @@
 const db = require('../models');
 
+const {filters, parseRSS } = require('../providers/feed')
 
-const create = (req, res) => {
 
-  const feedData = {
-    feedUrl: 'http://feeds.bbci.co.uk/news/world/rss.xml',
-      sourceUrl: 'https://www.bbc.co.uk/news/',
-      imageUrl: 'https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif',
-      title: 'BBC News - World',
-      description: 'BBC News - World',
-      filterStrength: 0,
-      chartData: {
-        title: 'BBC News - World',
-        veryNegative: 25,
-        slightlyNegative: 25,
-        neutral: 25,
-        slightlyPositive: 25,
-        veryPositive: 0
-      }
-    }
+const create = async (req, res) => {
+  try {
+    var currentUser = await db.User.findById({ _id: req.body.userId })
+  } catch(error) {
+    if (error) res.status(500).json({error: error.message})
+  }
+  
+
+  const feedData = await parseRSS(req.body.feedUrl)
+
+  db.Feed.create({
+    feedUrl: feedData.feedUrl,
+    sourceUrl: feedData.link,
+    imageUrl: feedData.imageUrl,
+    title: feedData.title,
+    description: feedData.description,
+    filterStrength: 0,
+    chartData: feedData.chartData
     
-  db.Feed.create(feedData, (err, savedFeed) => {
-    if (err) console.log('Error in games#create:', err);
-
-    res.status(201).json({ feed: savedFeed })
-    });
+  }, (err, savedFeed) => {
+    if (err) console.log('Error in feeds#create:', err);
+    currentUser.feeds.push(savedFeed)
+    res.status(201).json({ 
+      feed: savedFeed,
+      user: currentUser 
+    })
+  });
 };
+
+const show = async (req, res) => {
+  const feedData = await parseRSS(req.body.feedUrl)
+  const filterStrength = req.body.filterStrength
+
+  feedData.items = feedData.items.filter(item => filters[filterStrength](item))
+
+  res.status(201).json({data: feedData})
+}
 
 
 module.exports = {
-    create
+    create,
+    show,
 };

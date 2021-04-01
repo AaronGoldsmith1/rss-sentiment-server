@@ -6,15 +6,14 @@ function signUp(req, res, next) {
     return res.status(422).send('Missing required fields');
   }
 
-  db.User
-    .create(req.body)
+  db.User.create(req.body)
     .then(function(user) {
       res.json({
         success: true,
         message: 'Successfully created user.',
         data: {
-          email: user.email,
-          id:    user._id
+          name: user.name,
+          id: user._id
         }
       });
     }).catch(function(err) {
