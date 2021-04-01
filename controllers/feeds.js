@@ -2,7 +2,12 @@ const db = require('../models');
 
 const {filters, parseRSS } = require('../providers/feed')
 
+//show all of a user rss feeds
+const index = async (req, res) => {
 
+}
+
+//store new feed for a user
 const create = async (req, res) => {
   try {
     var currentUser = await db.User.findById({ _id: req.body.userId })
@@ -35,6 +40,7 @@ const create = async (req, res) => {
   });
 };
 
+//show individual feed items, filtered by sentiment
 const show = async (req, res) => {
   const feedData = await parseRSS(req.body.feedUrl)
   const filterStrength = req.body.filterStrength
@@ -45,7 +51,21 @@ const show = async (req, res) => {
 }
 
 
+//update sentiment filter strength for rss feed
+const update = async (req, res) => {
+
+}
+
+//remove rss feed from users list and db
+const destroy = async (req, res) => {
+
+}
+
+
 module.exports = {
+    index,
     create,
     show,
+    update,
+    destroy
 };
