@@ -11,6 +11,7 @@ app.use(express.json());
 
 // middleware - API routes
 app.use('/api/v1/feeds', routes.feeds);
+app.use('/api/v1/users', routes.users);
 
 // connection
 app.listen(port, () => console.log(`Server is running on port ${port}`));

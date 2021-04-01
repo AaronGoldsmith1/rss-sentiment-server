@@ -14,4 +14,5 @@ mongoose.connect(connectionString, configOptions)
 
 module.exports = {
     Feed: require('./feed'),
+    User: require('./user')
 };
