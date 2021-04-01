@@ -25,9 +25,12 @@ const create = async (req, res) => {
   }, (err, savedFeed) => {
     if (err) console.log('Error in feeds#create:', err);
     currentUser.feeds.push(savedFeed)
-    res.status(201).json({ 
-      feed: savedFeed,
-      user: currentUser 
+    currentUser.save(function(err, updatedUser) {
+      if (err) res.json({err})
+      res.status(201).json({ 
+        feed: savedFeed,
+        user: updatedUser 
+      })
     })
   });
 };
