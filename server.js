@@ -1,4 +1,3 @@
-// imports
 require('dotenv').config();
 const express = require('express');
 const routes = require('./routes');
@@ -11,7 +10,6 @@ app.use(express.json());
 
 // middleware - API routes
 app.use('/api/v1/feeds', routes.feeds);
-// app.use('/api/v1/users', routes.users);
 app.use("/api/v1/auth", routes.auth);
 
 // connection

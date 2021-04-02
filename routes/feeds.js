@@ -1,13 +1,10 @@
-// imports
 const router = require('express').Router();
 const ctrl = require('../controllers');
 
-// routes
 router.get('/', ctrl.feeds.index);
-router.get('/:id', ctrl.feeds.show);
+router.get('/details', ctrl.feeds.show);
 router.post('/', ctrl.feeds.create);
-router.put('/:id', ctrl.feeds.update);
-router.delete('/:id', ctrl.feeds.destroy);
+router.put('/update', ctrl.feeds.update);
+router.delete('/destroy', ctrl.feeds.destroy);
 
-// exports
 module.exports = router;

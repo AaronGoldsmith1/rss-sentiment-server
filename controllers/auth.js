@@ -16,9 +16,7 @@ const register = async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, salt);
     const createdUser = await db.User.create({ ...req.body, password: hash });
 
-    return res
-      .status(201)
-      .json({ status: 201, message: "success", createdUser });
+    return res.status(201).json({ status: 201, message: "success", createdUser });
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -34,9 +32,7 @@ const login = async (req, res) => {
     );
 
     if (!foundUser) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Username or password is incorrect" });
+      return res.status(400).json({ status: 400, message: "Username or password is incorrect" });
     }
 
     const isMatch = await bcrypt.compare(req.body.password, foundUser.password);
