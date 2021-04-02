@@ -69,7 +69,7 @@ const login = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    const foundUser = await db.User.findById(req.currentUser);
+    const foundUser = await db.User.findById(req.currentUser).populate('feeds').exec();
 
     res.json({ headers: req.headers, user: foundUser });
   } catch (error) {
