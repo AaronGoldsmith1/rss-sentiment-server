@@ -51,6 +51,7 @@ const login = async (req, res) => {
         status: 200,
         message: "Success",
         token: signedJwt,
+        userId: foundUser._id
       });
     } else {
       // the password provided does not match the password on file.
