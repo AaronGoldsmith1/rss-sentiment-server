@@ -29,7 +29,9 @@ const login = async (req, res) => {
   try {
     const foundUser = await db.User.findOne({ email: req.body.email }).select(
       "+password"
-    );
+    ).populate('feeds').exec()
+
+    // await foundUser.populate('feeds').exec()
 
     if (!foundUser) {
       return res.status(400).json({ status: 400, message: "Username or password is incorrect" });
@@ -50,8 +52,8 @@ const login = async (req, res) => {
       res.status(200).json({
         status: 200,
         message: "Success",
-        token: signedJwt,
-        userId: foundUser._id
+        // token: signedJwt,
+        user: foundUser
       });
     } else {
       // the password provided does not match the password on file.
