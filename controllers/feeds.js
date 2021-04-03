@@ -39,7 +39,6 @@ const create = async (req, res) => {
       if (err) res.json({err})
 
       let updatedUser = await db.User.findById({ _id: user._id}).populate('feeds').exec()
-            console.log('updatedUser', updatedUser)
       res.status(201).json({ 
         feed: savedFeed,
         user: updatedUser
