@@ -1,7 +1,7 @@
 const db = require('../models');
 const {filters, parseRSS } = require('../providers/feed')
 
-//show all of a user rss feeds
+//show all of a user rss feeds //dont need
 const index = async (req, res) => {
   try {
     const currentUser = await db.User.findById({ _id: req.body.userId}).populate('feeds').exec()
@@ -48,7 +48,9 @@ const create = async (req, res) => {
 //show individual feed items, filtered by sentiment
 const show = async (req, res) => {
   try{
-    const feedData = await parseRSS(req.body.feedUrl)
+    const currentFeed = await db.Feed.findOne({_id: req.params.id})
+
+    const feedData = await parseRSS(currentFeed.feedUrl)
     const filterStrength = req.body.filterStrength || 0
 
     feedData.items = feedData.items.filter(item => filters[filterStrength](item))
