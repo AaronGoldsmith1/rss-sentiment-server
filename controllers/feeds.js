@@ -53,7 +53,7 @@ const show = async (req, res) => {
     const currentFeed = await db.Feed.findOne({_id: req.params.id})
 
     const feedData = await parseRSS(currentFeed.feedUrl)
-    const filterStrength = req.body.filterStrength || 0
+    const filterStrength = req.params.filterStrength || 0
 
     feedData.items = feedData.items.filter(item => filters[filterStrength](item))
 
