@@ -88,12 +88,14 @@ const update = async (req, res) => {
 //remove rss feed from users list and db
 const destroy = async (req, res) => {
   try {
-    const currentUser = await db.User.findOne({ _id: req.body.userId})
+    const currentUser = await db.User.findById({ _id: req.body.userId})
     
     currentUser.feeds.remove(req.body.feedId)
     
     await currentUser.save()
     
+    let updatedUser = await db.User.findById({_id: req.body.userId}).populate('feeds').exec()
+
     await db.Feed.deleteOne({ _id: req.body.feedId})
     
     res.status(200).json({
@@ -101,7 +103,7 @@ const destroy = async (req, res) => {
       message: `Feed has been deleted`,
       data: {
         feed: req.body.feedId,
-        user: currentUser
+        user: updatedUser
       }
     })
   } catch(error) {
