@@ -71,13 +71,16 @@ const update = async (req, res) => {
   try {
     const filterStrength = req.body.filterStrength
     const updatedFeed = await db.Feed.updateOne({_id: req.body.feedId}, { filterStrength })
-    
+
+    const updatedUser = await db.User.findById({ _id: req.body.userId}).populate('feeds').exec()
+
     res.status(200).json({
       success: true,
       message: 'Feed successfully updated',
       data: {
         success: true,
-        recordsAffected: updatedFeed.nModified
+        recordsAffected: updatedFeed.nModified,
+        user: updatedUser
       }
     })
   } catch(error) {
