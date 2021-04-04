@@ -17,13 +17,9 @@ const index = async (req, res) => {
 const create = async (req, res) => {
   try {
     var currentUser = await db.User.findById({ _id: req.body.userId })
-  } catch(error) {
-    if (error) res.status(500).json({error: error.message})
-  }
-  
-  const feedData = await parseRSS(req.body.feedUrl)
+    const feedData = await parseRSS(req.body.feedUrl)
 
-  db.Feed.create({
+     db.Feed.create({
     feedUrl: feedData.feedUrl,
     sourceUrl: feedData.link,
     imageUrl: feedData.imageUrl,
@@ -45,11 +41,15 @@ const create = async (req, res) => {
       })
     })
   });
+  } catch(error) {
+    if (error) res.status(500).json({error: error.message})
+  }
+
 };
 
 //show individual feed items, filtered by sentiment
 const show = async (req, res) => {
-  try{
+  try {
     const currentFeed = await db.Feed.findOne({_id: req.params.id})
 
     const feedData = await parseRSS(currentFeed.feedUrl)
