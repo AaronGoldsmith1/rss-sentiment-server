@@ -1,12 +1,12 @@
 const db = require('../models');
 const {filters, parseRSS } = require('../providers/feed')
 
-//show all of a user rss feeds //dont need
+//show all feeds in db
 const index = async (req, res) => {
   try {
-    const currentUser = await db.User.findById({ _id: req.body.userId}).populate('feeds').exec()
+    const allFeeds = await db.Feed.find()
 
-    res.status(200).json({ data: currentUser.feeds })
+    res.status(200).json({ data: allFeeds })
 
   } catch(error) {
     res.status(500).json({ message: error.message})
