@@ -49,28 +49,26 @@ const calculateChartData = (feed) => {
 const parseRSS = async function (url) {
   let feed = await parser.parseURL(url);
 
-  console.log(feed)
 
- feed.items = feed.items.map((item, idx) => {
-   let { comparative } = sentiment.analyze(item.title)
-   return {
-     title: item.title,
-     link: item.link,
-     date: item.pubDate,
+  feed.items = feed.items.map((item, idx) => {
+    let { comparative } = sentiment.analyze(item.title)
+    return {
+      title: item.title,
+      link: item.link,
+      date: item.pubDate,
     //  media: item['media:group'] || item['media:content'] || '',
-     description: item.description, 
-     score: comparative
-   } 
- })
+      description: item.description, 
+      score: comparative
+    } 
+  })
 
  
- feed.chartData = calculateChartData(feed.items)
- feed.chartData.title = feed.title
- feed.feedUrl = url
- feed.imageUrl = feed.image && feed.image.url || '',
- feed.description = feed.description
- feed.filterStrength = 0
-  // console.log(feed)
+  feed.chartData = calculateChartData(feed.items)
+  feed.chartData.title = feed.title
+  feed.feedUrl = url
+  feed.imageUrl = feed.image && feed.image.url || '',
+  feed.description = feed.description
+  feed.filterStrength = 0
   return feed
 };
 

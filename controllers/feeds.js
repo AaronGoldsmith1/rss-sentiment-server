@@ -15,11 +15,19 @@ const index = async (req, res) => {
 
 //store new feed for a user
 const create = async (req, res) => {
+  if (!req.body.feedUrl) {
+    return res.status(400).json({error: 'Bad Request - Missing Feed URL'})
+  }
+
+  if (!req.body.userId) {
+    return res.status(401).json({error: 'Unauthorized - Missing User ID'})
+  }
+
   try {
     var currentUser = await db.User.findById({ _id: req.body.userId })
     const feedData = await parseRSS(req.body.feedUrl)
 
-     db.Feed.create({
+    db.Feed.create({
     feedUrl: feedData.feedUrl,
     sourceUrl: feedData.link,
     imageUrl: feedData.imageUrl,
@@ -44,7 +52,6 @@ const create = async (req, res) => {
   } catch(error) {
     if (error) res.status(500).json({error: error.message})
   }
-
 };
 
 //show individual feed items, filtered by sentiment
