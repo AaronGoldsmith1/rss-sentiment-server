@@ -30,10 +30,10 @@ const create = async (req, res) => {
     
   }, (err, savedFeed) => {
     if (err) console.log('Error in feeds#create:', err);
-    currentUser.feeds.push(savedFeed)
+    currentUser.feeds.unshift(savedFeed)
     currentUser.save( async function(err, user) {
       if (err) res.json({err})
-
+      if (!user) res.status(500).json({error: error.message})
       let updatedUser = await db.User.findById({ _id: user._id}).populate('feeds').exec()
       res.status(201).json({ 
         feed: savedFeed,
