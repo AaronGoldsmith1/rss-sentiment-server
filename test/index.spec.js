@@ -1,15 +1,12 @@
 const supertest = require('supertest');
-const assert = require('assert');
-
-const {describe} = require('mocha')
-
+const { describe } = require('mocha')
 const { expect } = require('chai')
 
 const app = require('../server');
 const db = require('../models');
 
 describe('GET /api/v1/feeds', function() { 
-  it('it should has status code 200', function(done) { 
+  it('it should have status code 200', function(done) { 
      supertest(app)
       .get('/api/v1/feeds')
       .expect(200)
@@ -118,6 +115,57 @@ describe('DELETE /api/v1/feeds/destroy', function() {
   })
 })
 
+
+describe('POST /api/v1/auth/register', function() { 
+  it('it should create a new user', async function() { 
+    const data = {
+      username: 'test-user',
+      email: 'test@user.com',
+      password: 'password'
+    }
+
+
+     await supertest(app)
+      .post('/api/v1/auth/register')
+      .send(data)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.createdUser).to.not.be.null
+      })
+  })
+})
+
+describe('POST /api/v1/auth/login', function() { 
+  it('it should log in a user', async function() { 
+    const data = {
+      username: 'test-user',
+      email: 'test@user.com',
+      password: 'password'
+    }
+
+
+     await supertest(app)
+      .post('/api/v1/auth/login')
+      .send(data)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.message).to.be.equal('Success')
+        expect(response.body.user).to.not.be.null
+      })
+  })
+})
+
+describe('', function () {
+  it('it should remove test user from database', async function() {
+    const user = await db.User.findOne({
+      email: 'test@user.com'
+    })
+
+    await user.delete()
+    await supertest(app).then(process.exit())
+  })
+})
+
 describe('', function () {
   it('it should remove test user from database', async function() {
     const user = await db.User.findOne({ 
@@ -128,7 +176,5 @@ describe('', function () {
 
     await user.delete()
     await supertest(app)
-    process.exit()
   })
 })
-
