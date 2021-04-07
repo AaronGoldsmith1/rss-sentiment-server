@@ -156,18 +156,18 @@ describe('POST /api/v1/auth/login', function() {
 })
 
 describe('', function () {
-  it('it should remove test user from database', async function() {
+  it('it should remove test users from database', async function() {
     const user = await db.User.findOne({
       email: 'test@user.com'
     })
 
     await user.delete()
-    await supertest(app).then(process.exit())
+    await supertest(app)
   })
 })
 
 describe('', function () {
-  it('it should remove test user from database', async function() {
+  it('it should remove test users from database', async function() {
     const user = await db.User.findOne({ 
       username: 'user9', 
       email: 'user9@fake.com',
@@ -175,6 +175,6 @@ describe('', function () {
     })
 
     await user.delete()
-    await supertest(app)
+    await supertest(app).then(process.exit())
   })
 })
